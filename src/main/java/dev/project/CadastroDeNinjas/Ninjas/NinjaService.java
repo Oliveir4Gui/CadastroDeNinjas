@@ -21,7 +21,8 @@ public class NinjaService {
     }
 
     public NinjaModel buscarId( Long id){
-        return ninjaRepository.findById(id);
+       Optional<NinjaModel> ninjaModel = ninjaRepository.findById(id);
+       return ninjaModel.orElse(null);
     }
 
 
