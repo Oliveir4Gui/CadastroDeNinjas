@@ -8,10 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
 @Table(name = "tb_cadastro")
 public class NinjaModel {
