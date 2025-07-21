@@ -37,4 +37,7 @@ public class NinjaModel {
     @JoinColumn(name = "missoes_id") //Foreing Key
     private MissoesModel missoes;
 
+    @JoinColumn(name ="rank")
+    private String rank;
+
 }
