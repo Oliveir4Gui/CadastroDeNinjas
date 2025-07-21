@@ -1,5 +1,7 @@
 package dev.project.CadastroDeNinjas.Ninjas;
+import dev.project.CadastroDeNinjas.Ninjas.NinjaMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -10,9 +12,15 @@ import java.util.Optional;
 public class NinjaService {
 
     private NinjaRepository ninjaRepository;
+    private NinjaMapper ninjaMapper;
 
     public NinjaService(NinjaRepository ninjaRepository) {
         this.ninjaRepository = ninjaRepository;
+    }
+    @Autowired
+    public NinjaService(NinjaRepository ninjaRepository, NinjaMapper ninjaMapper) {
+        this.ninjaRepository = ninjaRepository;
+        this.ninjaMapper = ninjaMapper;
     }
 
     //Listar Todos os Ninjas
@@ -25,8 +33,10 @@ public class NinjaService {
        return ninjaModel.orElse(null);
     }
 
-    public NinjaModel criaNinja(NinjaModel ninjaModel){
-        return ninjaRepository.save(ninjaModel);
+    public NinjaDTO criaNinja(NinjaDTO ninjaDTO){
+     NinjaModel ninja = new NinjaMapper().map(ninjaDTO);
+     ninja = ninjaRepository.save(ninja);
+     return ninjaMapper.map(ninja);
     }
 
     public void deletaNinjaId(Long id){
