@@ -1,23 +1,36 @@
 package dev.project.CadastroDeNinjas.Missoes;
 
 
+import dev.project.CadastroDeNinjas.Ninjas.NinjaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MissoesService {
-    @Autowired
-    private MissoesRepository missoesRepository;
 
-    public List<MissoesModel>mostrarMissoes(){
-        return missoesRepository.findAll();
+    private MissoesRepository missoesRepository;
+    private MissoesMapper missoesMapper;
+
+    @Autowired
+    public MissoesService(MissoesRepository missoesRepository, MissoesMapper missoesMapper) {
+        this.missoesRepository = missoesRepository;
+        this.missoesMapper = missoesMapper;
     }
 
-    public  MissoesModel criaMissao(MissoesModel missao){
-        return missoesRepository.save(missao);
+    public List<MissoesDTO>mostrarMissoes(){
+        List<MissoesModel> missoesModels = missoesRepository.findAll();
+        return missoesModels.stream().map(missoesMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public  MissoesDTO criaMissao(MissoesDTO missao){
+        MissoesModel missoesModel = missoesMapper.toModel(missao);
+        missoesRepository.save(missoesModel);
+        return missoesMapper.toDto(missoesModel);
     }
 
     public void deletaMissaoId(Long id){
@@ -28,10 +41,13 @@ public class MissoesService {
         return missao.orElse(null);
     }
 
-    public MissoesModel alteraMissaoId(Long id, MissoesModel missao){
-        if (missoesRepository.existsById(id)){
+    public MissoesDTO alteraMissaoId(Long id, MissoesDTO missao){
+        Optional<MissoesModel> missoesModel = missoesRepository.findById(id);
+        if (missoesModel.isPresent()){
             missao.setId(id);
-          return  missoesRepository.save(missao);
+            MissoesModel missaoAtualizada = missoesMapper.toModel(missao);
+            missoesRepository.save(missaoAtualizada);
+            return missoesMapper.toDto(missaoAtualizada);
         }
         return null;
     }
