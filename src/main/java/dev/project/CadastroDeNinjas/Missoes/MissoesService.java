@@ -1,7 +1,6 @@
 package dev.project.CadastroDeNinjas.Missoes;
 
 
-import dev.project.CadastroDeNinjas.Ninjas.NinjaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,11 @@ public class MissoesService {
         List<MissoesModel> missoesModels = missoesRepository.findAll();
         return missoesModels.stream().map(missoesMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public MissoesDTO listarMissaoId(long id){
+        Optional<MissoesModel> missoesModel =missoesRepository.findById(id);
+       return missoesModel.map(missoesMapper::toDto).orElse(null);
     }
 
     public  MissoesDTO criaMissao(MissoesDTO missao){

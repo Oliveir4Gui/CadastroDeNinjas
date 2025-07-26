@@ -24,7 +24,7 @@ public class NinjaController {
     public ResponseEntity criarNinja(@RequestBody NinjaDTO ninjaDTO){
        NinjaDTO ninjaDto = ninjaService.criaNinja(ninjaDTO);
       return ResponseEntity.status(HttpStatus.CREATED)
-               .body("Ninja Criado com Sucesso: " + ninjaDto.getNome() + " ID: " + ninjaDto.getId());
+               .body(ninjaDto);
     }
 
    //Procurar Ninja por ID
